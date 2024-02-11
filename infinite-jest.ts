@@ -8,7 +8,7 @@
 
   const overlaps: { item: HTMLElement, target: HTMLElement }[] = [];
 
-  const conn = new WebSocket("wss://infinite-jest.dixonary.co.uk:12024");
+  const conn = new WebSocket("wss://infinite-jest.dixonary.co.uk:2024");
   conn.onopen = () => {
     console.log("Connected to Infinite Jest");
     conn.send(id);
