@@ -2,6 +2,8 @@
 
 This adds a multiplayer lockout mod to [infinite craft](https://neal.fun/infinite-craft).
 
+![](https://dixonary.co.uk/static/infinite-jest-example.gif)
+
 ## How to play
 
 I host a server at the link hardcoded into the game code. So you only need to run the script to start the game.
