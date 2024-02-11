@@ -20,6 +20,7 @@ import Data.Functor (($>))
 import Data.Maybe (fromJust, fromMaybe)
 import Data.Time (getCurrentTime)
 import Data.Time.Clock (UTCTime)
+import GHC.IO (unsafePerformIO)
 import System.Random.Shuffle (shuffleM)
 import Types
 
@@ -63,7 +64,7 @@ app _rooms pendingConn = do
               <$> shuffleM (map (Text.take 100) includeTargets)
 
           otherItems <-
-            take (numItems - length includeTargets) <$> shuffleM randomItem
+            take (numItems - length includeTargets) <$> shuffleM allTargets
 
           fmap (map (`Item` Nothing)) $ shuffleM $ includedItems <> otherItems
 
@@ -92,8 +93,23 @@ parseEvent raw =
         | event == "unclaim" -> PUnclaim <$> JSON.decodeStrictText payload
         | otherwise -> Nothing
 
-randomItem :: [Text]
-randomItem = map Text.singleton ['A' .. 'Z']
+allTargets :: [Text]
+allTargets =
+  [ "A colour"
+  , "A number"
+  , "A single character"
+  , "Something with 1000 in the name"
+  , "A Microsoft Office program"
+  , "A programming language"
+  , "A country"
+  , "A city"
+  , "A fruit"
+  , "United Kingdom"
+  , "A type of cheese"
+  , "A film sequel that doesn't exist"
+  , "A roman emperor"
+  ]
+    <> (map Text.pack . lines $ unsafePerformIO $ readFile "nouns.txt")
 
 --------------------------------------------------------------------------------
 -- Room creation and updating
