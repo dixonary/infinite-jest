@@ -80,6 +80,7 @@ executable infinite-jest-server
                 , time
                 , random
                 , random-shuffle
+                , wuss
 
     -- Directories containing source files.
     hs-source-dirs:   app
