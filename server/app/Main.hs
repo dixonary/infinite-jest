@@ -61,12 +61,14 @@ app _rooms pendingConn = do
         items <- do
           includedItems <-
             take numItems
-              <$> shuffleM (map (Text.take 100) includeTargets)
+              <$> shuffleM (map (Text.take 100) $ filter (not . Text.null) includeTargets)
 
           otherItems <-
             take (numItems - length includeTargets) <$> shuffleM allTargets
 
           fmap (map (`Item` Nothing)) $ shuffleM $ includedItems <> otherItems
+
+        putStrLn $ "Chose items: " ++ show items
 
         updateRoom roomId (startGame items now) _rooms
       PClaim cr@ClaimRequest{..} -> do
@@ -85,8 +87,8 @@ parseEvent raw =
   let
     Event{..} = fromJust $ JSON.decodeStrictText @Event raw
    in
-    fromMaybe (PUnknown payload)
-      $ if
+    fromMaybe (PUnknown payload) $
+      if
         | event == "join" -> PJoin <$> JSON.decodeStrictText payload
         | event == "start" -> PStart <$> JSON.decodeStrictText payload
         | event == "claim" -> PClaim <$> JSON.decodeStrictText payload
@@ -119,20 +121,20 @@ createRoom :: Text -> Text -> TVar JestState -> IO ()
 createRoom roomId clientId _rooms = do
   didCreate <- atomically $ do
     r <- readTVar _rooms
-    when (Map.notMember roomId r)
-      $ writeTVar _rooms
-      $ Map.insert
-        roomId
-        Room
-          { rid = roomId
-          , clients = mempty
-          , connected = mempty
-          , leader = clientId
-          , items = mempty
-          , status = Lobby
-          , started = Nothing
-          }
-        r
+    when (Map.notMember roomId r) $
+      writeTVar _rooms $
+        Map.insert
+          roomId
+          Room
+            { rid = roomId
+            , clients = mempty
+            , connected = mempty
+            , leader = clientId
+            , items = mempty
+            , status = Lobby
+            , started = Nothing
+            }
+          r
     pure $ Map.notMember roomId r
   when didCreate $ putStrLn $ "Created room " ++ show roomId
 
@@ -196,8 +198,8 @@ unclaimItem clientId target room =
 -- Add a new client and connect them
 addClient :: Client -> Room -> Room
 addClient Client{..} room =
-  addConnectedClient cid
-    $ room{clients = Map.insert cid Client{..} (clients room)}
+  addConnectedClient cid $
+    room{clients = Map.insert cid Client{..} (clients room)}
 
 -- Remove a client from a room
 removeClient :: Text -> Room -> Room
