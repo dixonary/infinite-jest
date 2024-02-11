@@ -2,7 +2,7 @@
 
 This adds a multiplayer lockout mod to [infinite craft](https://neal.fun/infinite-craft).
 
-![](https://dixonary.co.uk/static/infinite-jest-example.gif)
+![](https://dixonary.co.uk/static/infinite-jest-example.gif?1707665970731)
 
 ## How to play
 
