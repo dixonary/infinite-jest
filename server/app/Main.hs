@@ -25,9 +25,9 @@ import Types
 
 main :: IO ()
 main = do
-  putStrLn "Running on :8080"
+  putStrLn "Running on :12024"
   _rooms <- newTVarIO mempty
-  WS.runServer "0.0.0.0" 8080 $ app _rooms
+  WS.runServer "0.0.0.0" 12024 $ app _rooms
 
 app :: TVar JestState -> WS.ServerApp
 app _rooms pendingConn = do

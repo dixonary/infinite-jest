@@ -5,7 +5,7 @@
     var id = localStorage.getItem("infinite-jest-id") || crypto.randomUUID();
     localStorage.setItem("infinite-jest-id", id);
     var overlaps = [];
-    var conn = new WebSocket("ws://localhost:8080");
+    var conn = new WebSocket("ws://dixonary.co.uk:12024");
     conn.onopen = function () {
         console.log("Connected to Infinite Jest");
         conn.send(id);
